@@ -42,8 +42,8 @@ function setupEventListeners() {
   const saveNoteBtn = document.getElementById('saveNoteBtn');
   saveNoteBtn.addEventListener('click', saveCurrentNote);
 
-  const deleteNoteBtn = document.getElementById('deleteNoteBtn');
-  deleteNoteBtn.addEventListener('click', deleteCurrentNote);
+  const cancelNoteBtn = document.getElementById('cancelNoteBtn');
+  cancelNoteBtn.addEventListener('click', closeModal);
 
   // 모달 배경 클릭 시 닫기
   const modal = document.getElementById('noteModal');
@@ -112,9 +112,9 @@ function createNoteCard(note) {
   const cardHeader = document.createElement('div');
   cardHeader.className = 'note-card-header';
 
-  const title = document.createElement('h3');
+  const title = document.createElement('div');
+  title.className = 'note-card-title';
   title.textContent = note.title || '제목 없음';
-  title.addEventListener('click', () => openNote(note.id));
 
   // 중요 메모 별 버튼
   const starBtn = document.createElement('button');
@@ -134,15 +134,43 @@ function createNoteCard(note) {
   // 카드 내용
   const cardContent = document.createElement('div');
   cardContent.className = 'note-card-content';
-  cardContent.addEventListener('click', () => openNote(note.id));
 
-  const content = document.createElement('p');
-  content.textContent = note.content || '';
+  const preview = document.createElement('p');
+  preview.className = 'note-card-preview';
+  preview.textContent = note.content || '내용 미리보기';
 
-  cardContent.appendChild(content);
+  cardContent.appendChild(preview);
+
+  // 카드 푸터 (날짜 + 삭제 버튼)
+  const cardFooter = document.createElement('div');
+  cardFooter.className = 'note-card-footer';
+
+  const dateSpan = document.createElement('span');
+  dateSpan.className = 'note-card-date';
+  const date = new Date(note.date);
+  dateSpan.textContent = date.toLocaleDateString('ko-KR', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit'
+  });
+
+  const deleteBtn = document.createElement('button');
+  deleteBtn.className = 'note-delete-btn';
+  deleteBtn.textContent = '삭제';
+  deleteBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    deleteNoteFromCard(note.id);
+  });
+
+  cardFooter.appendChild(dateSpan);
+  cardFooter.appendChild(deleteBtn);
+
+  // 카드 클릭 이벤트
+  card.addEventListener('click', () => openNote(note.id));
 
   card.appendChild(cardHeader);
   card.appendChild(cardContent);
+  card.appendChild(cardFooter);
 
   return card;
 }
@@ -205,15 +233,12 @@ function saveCurrentNote() {
   closeModal();
 }
 
-// 현재 메모 삭제
-function deleteCurrentNote() {
-  if (!currentNoteId) return;
-
+// 카드에서 메모 삭제
+function deleteNoteFromCard(id) {
   if (confirm('이 메모를 삭제하시겠습니까?')) {
-    notes = notes.filter(n => n.id !== currentNoteId);
+    notes = notes.filter(n => n.id !== id);
     saveNotes();
     displayNotes();
-    closeModal();
   }
 }
 

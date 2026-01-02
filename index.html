@@ -18,32 +18,46 @@
   <link rel="apple-touch-icon" href="icons/icon-192x192.png">
 </head>
 <body>
-  <!-- 헤더 -->
-  <header>
-    <h1>my note</h1>
-    <div class="header-actions">
-      <button id="filterBtn" class="icon-btn" aria-label="중요 메모 필터" title="전체 메모">📋</button>
-      <button id="settingsBtn" class="icon-btn" aria-label="설정">⚙</button>
+  <!-- 사이드바 -->
+  <aside class="sidebar">
+    <div class="logo">
+      <h2>로고</h2>
     </div>
-  </header>
+    <nav class="menu">
+      <button class="menu-item active">메모홀더</button>
+    </nav>
+  </aside>
 
-  <!-- 메인 영역 -->
-  <main>
-    <!-- 검색창 -->
-    <div class="search-container">
-      <input type="text" id="searchInput" placeholder="메모 검색..." aria-label="메모 검색">
-    </div>
+  <!-- 메인 컨테이너 -->
+  <div class="main-container">
+    <!-- 헤더 -->
+    <header>
+      <div class="header-left">
+        <button id="filterBtn" class="header-btn" aria-label="보기 전환" title="전체 메모">
+          <span>📋</span>
+          <span>보기/메모</span>
+        </button>
+        <button id="settingsBtn" class="header-btn" aria-label="다크모드" title="다크모드 전환">
+          <span>🌙</span>
+          <span>다크모드 전환</span>
+        </button>
+      </div>
+      <div class="search-container-header">
+        <input type="text" id="searchInput" placeholder="검색창" aria-label="메모 검색">
+      </div>
+    </header>
 
-    <!-- 메모 목록 -->
-    <section id="notesList" class="notes-list">
-      <!-- 메모 카드들이 여기에 동적으로 추가됩니다 -->
-    </section>
-  </main>
+    <!-- 메인 영역 -->
+    <main>
+      <!-- 메모 목록 -->
+      <section id="notesList" class="notes-list">
+        <!-- 메모 카드들이 여기에 동적으로 추가됩니다 -->
+      </section>
+    </main>
 
-  <!-- 새 메모 추가 버튼 -->
-  <button id="addNoteBtn" class="add-note-btn" aria-label="새 메모 추가">
-    + 새 메모
-  </button>
+    <!-- 새 메모 추가 버튼 -->
+    <button id="addNoteBtn" class="add-note-btn" aria-label="메모작성 버튼">+</button>
+  </div>
 
   <!-- 메모 상세보기/수정 모달 -->
   <div id="noteModal" class="modal">
@@ -56,7 +70,7 @@
         <textarea id="noteContentInput" class="note-content-input" placeholder="내용을 입력하세요" aria-label="메모 내용"></textarea>
       </div>
       <div class="modal-footer">
-        <button id="deleteNoteBtn" class="btn btn-danger">삭제</button>
+        <button id="cancelNoteBtn" class="btn btn-secondary">취소</button>
         <button id="saveNoteBtn" class="btn btn-primary">저장</button>
       </div>
     </div>
