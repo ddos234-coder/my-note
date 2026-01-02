@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="간편하게 사용가능한 실생활 노트">
+  <meta name="theme-color" content="#f5f4f0">
+  <title>my note</title>
+
+  <!-- Manifest -->
+  <link rel="manifest" href="manifest.json">
+
+  <!-- 스타일시트 -->
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- 아이콘 -->
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192x192.png">
+  <link rel="apple-touch-icon" href="icons/icon-192x192.png">
+</head>
+<body>
+  <!-- 헤더 -->
+  <header>
+    <h1>my note</h1>
+    <button id="settingsBtn" class="icon-btn" aria-label="설정">⚙</button>
+  </header>
+
+  <!-- 메인 영역 -->
+  <main>
+    <!-- 검색창 -->
+    <div class="search-container">
+      <input type="text" id="searchInput" placeholder="메모 검색..." aria-label="메모 검색">
+    </div>
+
+    <!-- 메모 목록 -->
+    <section id="notesList" class="notes-list">
+      <!-- 메모 카드들이 여기에 동적으로 추가됩니다 -->
+    </section>
+  </main>
+
+  <!-- 새 메모 추가 버튼 -->
+  <button id="addNoteBtn" class="add-note-btn" aria-label="새 메모 추가">
+    + 새 메모
+  </button>
+
+  <!-- 스크립트 -->
+  <script src="js/app.js"></script>
+  <script src="js/sw-register.js"></script>
+</body>
+</html>
