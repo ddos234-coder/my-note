@@ -446,6 +446,36 @@ main {
   border-color: var(--text-secondary);
 }
 
+.modal-actions {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0 1.5rem 1rem;
+}
+
+.action-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  background-color: var(--bg-hover);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.action-btn:hover {
+  background-color: var(--border-color);
+}
+
+.action-btn span:first-child {
+  font-size: 1.2rem;
+}
+
 .modal-footer {
   display: flex;
   justify-content: space-between;
@@ -480,6 +510,106 @@ main {
   background-color: var(--bg-hover);
   color: var(--text-primary);
   border: 1px solid var(--border-color);
+}
+
+/* ==================== 설정 모달 ==================== */
+.settings-modal {
+  max-width: 400px;
+}
+
+.settings-modal .modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.settings-modal .modal-header h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.setting-group {
+  margin-bottom: 1.5rem;
+}
+
+.setting-group:last-child {
+  margin-bottom: 0;
+}
+
+.setting-group h3 {
+  font-size: 1rem;
+  margin-bottom: 0.75rem;
+  color: var(--text-primary);
+}
+
+.font-size-options {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.font-size-btn {
+  flex: 1;
+  padding: 0.75rem;
+  background-color: var(--bg-input);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.font-size-btn:hover {
+  background-color: var(--bg-hover);
+}
+
+.font-size-btn.active {
+  background-color: var(--text-primary);
+  color: var(--bg-main);
+  border-color: var(--text-primary);
+}
+
+.setting-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  background-color: var(--bg-input);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 1rem;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.setting-btn:hover {
+  background-color: var(--bg-hover);
+}
+
+.setting-btn span:first-child {
+  font-size: 1.3rem;
+  margin-right: 0.75rem;
+}
+
+#darkModeStatus {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+/* 글자 크기 클래스 */
+body.font-small {
+  font-size: 14px;
+}
+
+body.font-medium {
+  font-size: 16px;
+}
+
+body.font-large {
+  font-size: 18px;
 }
 
 /* ==================== 반응형 ==================== */

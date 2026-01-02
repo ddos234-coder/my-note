@@ -10,6 +10,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // 다크모드 설정 불러오기
   loadDarkMode();
 
+  // 글자 크기 설정 불러오기
+  loadFontSize();
+
   // 저장된 메모 불러오기
   loadNotes();
 
@@ -52,6 +55,35 @@ function setupEventListeners() {
       closeModal();
     }
   });
+
+  // 설정 모달 관련
+  const closeSettingsBtn = document.getElementById('closeSettingsBtn');
+  closeSettingsBtn.addEventListener('click', closeSettingsModal);
+
+  const settingsModal = document.getElementById('settingsModal');
+  settingsModal.addEventListener('click', (e) => {
+    if (e.target === settingsModal) {
+      closeSettingsModal();
+    }
+  });
+
+  // 글자 크기 버튼
+  const fontSizeBtns = document.querySelectorAll('.font-size-btn');
+  fontSizeBtns.forEach(btn => {
+    btn.addEventListener('click', () => changeFontSize(btn.dataset.size));
+  });
+
+  // 설정 모달 내 다크모드 토글
+  const toggleDarkModeBtn = document.getElementById('toggleDarkModeBtn');
+  toggleDarkModeBtn.addEventListener('click', toggleDarkMode);
+
+  // 공유 버튼
+  const shareNoteBtn = document.getElementById('shareNoteBtn');
+  shareNoteBtn.addEventListener('click', shareNote);
+
+  // 복사 버튼
+  const copyNoteBtn = document.getElementById('copyNoteBtn');
+  copyNoteBtn.addEventListener('click', copyNote);
 
   // 백업 관련
   const exportBtn = document.getElementById('exportBtn');
@@ -300,6 +332,7 @@ function loadDarkMode() {
   if (isDarkMode) {
     document.body.classList.add('dark-mode');
   }
+  updateDarkModeStatus();
 }
 
 // 다크모드 토글
@@ -307,13 +340,143 @@ function toggleDarkMode() {
   document.body.classList.toggle('dark-mode');
   const isDarkMode = document.body.classList.contains('dark-mode');
   localStorage.setItem('darkMode', isDarkMode);
+  updateDarkModeStatus();
   console.log('다크모드:', isDarkMode ? 'ON' : 'OFF');
 }
 
-// ==================== 설정 ====================
+// 다크모드 상태 표시 업데이트
+function updateDarkModeStatus() {
+  const isDarkMode = document.body.classList.contains('dark-mode');
+  const statusElement = document.getElementById('darkModeStatus');
+  if (statusElement) {
+    statusElement.textContent = isDarkMode ? 'ON' : 'OFF';
+  }
+}
+
+// ==================== 글자 크기 ====================
+// 글자 크기 설정 불러오기
+function loadFontSize() {
+  const fontSize = localStorage.getItem('fontSize') || 'medium';
+  changeFontSize(fontSize);
+}
+
+// 글자 크기 변경
+function changeFontSize(size) {
+  // body에서 모든 글자 크기 클래스 제거
+  document.body.classList.remove('font-small', 'font-medium', 'font-large');
+
+  // 선택한 크기 적용
+  document.body.classList.add(`font-${size}`);
+
+  // LocalStorage에 저장
+  localStorage.setItem('fontSize', size);
+
+  // 버튼 활성화 상태 업데이트
+  document.querySelectorAll('.font-size-btn').forEach(btn => {
+    btn.classList.remove('active');
+    if (btn.dataset.size === size) {
+      btn.classList.add('active');
+    }
+  });
+
+  console.log('글자 크기:', size);
+}
+
+// ==================== 설정 모달 ====================
+// 설정 모달 열기
 function openSettings() {
-  // 설정 버튼을 다크모드 토글로 사용
-  toggleDarkMode();
+  const settingsModal = document.getElementById('settingsModal');
+  settingsModal.classList.add('active');
+}
+
+// 설정 모달 닫기
+function closeSettingsModal() {
+  const settingsModal = document.getElementById('settingsModal');
+  settingsModal.classList.remove('active');
+}
+
+// ==================== 공유 및 복사 기능 ====================
+// 메모 공유
+function shareNote() {
+  if (!currentNoteId) return;
+
+  const note = notes.find(n => n.id === currentNoteId);
+  if (!note) return;
+
+  const shareData = {
+    title: note.title || '제목 없음',
+    text: note.content || ''
+  };
+
+  // Web Share API 지원 확인
+  if (navigator.share) {
+    navigator.share(shareData)
+      .then(() => {
+        console.log('메모 공유 성공');
+      })
+      .catch((error) => {
+        console.log('메모 공유 취소 또는 실패:', error);
+      });
+  } else {
+    // Web Share API 미지원 시 복사 기능으로 대체
+    alert('이 브라우저는 공유 기능을 지원하지 않습니다.\n복사 기능을 사용해주세요.');
+  }
+}
+
+// 메모 복사
+function copyNote() {
+  if (!currentNoteId) return;
+
+  const note = notes.find(n => n.id === currentNoteId);
+  if (!note) return;
+
+  const textToCopy = `${note.title || '제목 없음'}\n\n${note.content || ''}`;
+
+  // Clipboard API 사용
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(textToCopy)
+      .then(() => {
+        alert('✅ 메모가 클립보드에 복사되었습니다!');
+        console.log('메모 복사 성공');
+      })
+      .catch((error) => {
+        console.error('메모 복사 실패:', error);
+        // 복사 실패 시 대체 방법 사용
+        fallbackCopyTextToClipboard(textToCopy);
+      });
+  } else {
+    // Clipboard API 미지원 시 대체 방법 사용
+    fallbackCopyTextToClipboard(textToCopy);
+  }
+}
+
+// 클립보드 복사 대체 방법 (구형 브라우저용)
+function fallbackCopyTextToClipboard(text) {
+  const textArea = document.createElement('textarea');
+  textArea.value = text;
+  textArea.style.position = 'fixed';
+  textArea.style.top = '0';
+  textArea.style.left = '0';
+  textArea.style.opacity = '0';
+  document.body.appendChild(textArea);
+  textArea.focus();
+  textArea.select();
+
+  try {
+    const successful = document.execCommand('copy');
+    if (successful) {
+      alert('✅ 메모가 클립보드에 복사되었습니다!');
+      console.log('메모 복사 성공 (대체 방법)');
+    } else {
+      alert('❌ 메모 복사에 실패했습니다.');
+      console.error('메모 복사 실패 (대체 방법)');
+    }
+  } catch (error) {
+    alert('❌ 메모 복사에 실패했습니다.');
+    console.error('메모 복사 실패:', error);
+  }
+
+  document.body.removeChild(textArea);
 }
 
 // ==================== 백업 관리 ====================

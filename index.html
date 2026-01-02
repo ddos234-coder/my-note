@@ -81,9 +81,47 @@
         <input type="text" id="noteTitleInput" class="note-title-input" placeholder="제목을 입력하세요" aria-label="메모 제목">
         <textarea id="noteContentInput" class="note-content-input" placeholder="내용을 입력하세요" aria-label="메모 내용"></textarea>
       </div>
+      <div class="modal-actions">
+        <button id="shareNoteBtn" class="action-btn" title="공유">
+          <span>🔗</span>
+          <span>공유</span>
+        </button>
+        <button id="copyNoteBtn" class="action-btn" title="복사">
+          <span>📋</span>
+          <span>복사</span>
+        </button>
+      </div>
       <div class="modal-footer">
         <button id="cancelNoteBtn" class="btn btn-secondary">취소</button>
         <button id="saveNoteBtn" class="btn btn-primary">저장</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 설정 모달 -->
+  <div id="settingsModal" class="modal">
+    <div class="modal-content settings-modal">
+      <div class="modal-header">
+        <h2>설정</h2>
+        <button id="closeSettingsBtn" class="icon-btn" aria-label="닫기">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="setting-group">
+          <h3>글자 크기</h3>
+          <div class="font-size-options">
+            <button class="font-size-btn" data-size="small">작게</button>
+            <button class="font-size-btn active" data-size="medium">보통</button>
+            <button class="font-size-btn" data-size="large">크게</button>
+          </div>
+        </div>
+        <div class="setting-group">
+          <h3>테마</h3>
+          <button id="toggleDarkModeBtn" class="setting-btn">
+            <span>🌙</span>
+            <span>다크모드</span>
+            <span id="darkModeStatus">OFF</span>
+          </button>
+        </div>
       </div>
     </div>
   </div>
