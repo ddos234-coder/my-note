@@ -198,11 +198,11 @@
 ## 6️. 배포 및 테스트
 
 ### Vercel 배포
-- [] GitHub 저장소에 최종 코드 푸시
-- [] Vercel 프로젝트 생성
-- [] GitHub 저장소 연결
-- [] 배포 완료
-- [] 배포 URL 확인
+- [x] GitHub 저장소에 최종 코드 푸시
+- [x] Vercel 프로젝트 생성
+- [x] GitHub 저장소 연결
+- [x] 배포 완료
+- [x] 배포 URL 확인 (https://my-note-livid.vercel.app/)
 
 ### PWA 설치 테스트
 - [] 모바일 브라우저에서 접속
