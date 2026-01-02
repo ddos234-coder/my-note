@@ -52,6 +52,18 @@ function setupEventListeners() {
       closeModal();
     }
   });
+
+  // 백업 관련
+  const exportBtn = document.getElementById('exportBtn');
+  exportBtn.addEventListener('click', exportNotes);
+
+  const importBtn = document.getElementById('importBtn');
+  importBtn.addEventListener('click', () => {
+    document.getElementById('importFileInput').click();
+  });
+
+  const importFileInput = document.getElementById('importFileInput');
+  importFileInput.addEventListener('change', importNotes);
 }
 
 // ==================== 메모 데이터 관리 ====================
@@ -302,4 +314,102 @@ function toggleDarkMode() {
 function openSettings() {
   // 설정 버튼을 다크모드 토글로 사용
   toggleDarkMode();
+}
+
+// ==================== 백업 관리 ====================
+// 메모 내보내기 (Export)
+function exportNotes() {
+  try {
+    // 날짜 형식: YYYYMMDD_HHMMSS
+    const now = new Date();
+    const dateStr = now.toISOString().slice(0, 10).replace(/-/g, '');
+    const timeStr = now.toTimeString().slice(0, 8).replace(/:/g, '');
+    const filename = `my-note-backup_${dateStr}_${timeStr}.json`;
+
+    // JSON 문자열 생성
+    const dataStr = JSON.stringify(notes, null, 2);
+    const blob = new Blob([dataStr], { type: 'application/json' });
+
+    // 다운로드 링크 생성
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+
+    // 성공 알림
+    alert(`✅ 백업 완료!\n파일명: ${filename}\n메모 개수: ${notes.length}개`);
+    console.log('메모 내보내기 성공:', filename);
+  } catch (error) {
+    // 실패 알림
+    alert('❌ 백업 실패!\n오류가 발생했습니다.');
+    console.error('메모 내보내기 실패:', error);
+  }
+}
+
+// 메모 가져오기 (Import)
+function importNotes(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  // 파일 형식 검증
+  if (!file.name.endsWith('.json')) {
+    alert('❌ 잘못된 파일 형식!\nJSON 파일만 가져올 수 있습니다.');
+    event.target.value = '';
+    return;
+  }
+
+  const reader = new FileReader();
+
+  reader.onload = (e) => {
+    try {
+      const importedData = JSON.parse(e.target.result);
+
+      // 데이터 유효성 검증
+      if (!Array.isArray(importedData)) {
+        throw new Error('올바른 메모 데이터가 아닙니다.');
+      }
+
+      // 복원 전 확인
+      const confirmMsg = `📥 메모를 가져오시겠습니까?\n\n가져올 메모: ${importedData.length}개\n현재 메모: ${notes.length}개\n\n기존 메모는 유지되고, 새로운 메모가 추가됩니다.`;
+
+      if (!confirm(confirmMsg)) {
+        event.target.value = '';
+        return;
+      }
+
+      // ID 중복 방지를 위해 새 ID 부여
+      const importedNotes = importedData.map(note => ({
+        ...note,
+        id: Date.now() + Math.random(),
+        date: note.date || new Date().toISOString()
+      }));
+
+      // 기존 메모에 추가
+      notes = [...importedNotes, ...notes];
+      saveNotes();
+      displayNotes();
+
+      // 성공 알림
+      alert(`✅ 가져오기 완료!\n${importedNotes.length}개의 메모를 가져왔습니다.`);
+      console.log('메모 가져오기 성공:', importedNotes.length);
+    } catch (error) {
+      // 실패 알림
+      alert('❌ 가져오기 실패!\n파일 형식이 올바르지 않거나 손상되었습니다.');
+      console.error('메모 가져오기 실패:', error);
+    }
+
+    // 파일 input 초기화
+    event.target.value = '';
+  };
+
+  reader.onerror = () => {
+    alert('❌ 파일 읽기 실패!\n파일을 읽을 수 없습니다.');
+    event.target.value = '';
+  };
+
+  reader.readAsText(file);
 }

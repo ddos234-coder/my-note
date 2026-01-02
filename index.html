@@ -26,6 +26,18 @@
     <nav class="menu">
       <button class="menu-item active">메모홀더</button>
     </nav>
+    <div class="backup-section">
+      <h3>백업 관리</h3>
+      <button id="exportBtn" class="backup-btn">
+        <span>💾</span>
+        <span>메모 내보내기</span>
+      </button>
+      <button id="importBtn" class="backup-btn">
+        <span>📥</span>
+        <span>메모 가져오기</span>
+      </button>
+      <input type="file" id="importFileInput" accept=".json" style="display: none;">
+    </div>
   </aside>
 
   <!-- 메인 컨테이너 -->

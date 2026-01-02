@@ -94,6 +94,44 @@ body {
   font-weight: 600;
 }
 
+/* ==================== 백업 섹션 ==================== */
+.backup-section {
+  margin-top: auto;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.backup-section h3 {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.backup-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  margin-bottom: 0.5rem;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.backup-btn:hover {
+  background-color: var(--bg-hover);
+}
+
+.backup-btn span:first-child {
+  font-size: 1.2rem;
+}
+
 /* ==================== 메인 컨테이너 ==================== */
 .main-container {
   flex: 1;
