@@ -7,6 +7,9 @@ let showOnlyImportant = false;
 document.addEventListener('DOMContentLoaded', () => {
   console.log('my note 앱 시작');
 
+  // 다크모드 설정 불러오기
+  loadDarkMode();
+
   // 저장된 메모 불러오기
   loadNotes();
 
@@ -253,8 +256,25 @@ function searchNotes() {
   displayNotes();
 }
 
+// ==================== 다크모드 ====================
+// 다크모드 설정 불러오기
+function loadDarkMode() {
+  const isDarkMode = localStorage.getItem('darkMode') === 'true';
+  if (isDarkMode) {
+    document.body.classList.add('dark-mode');
+  }
+}
+
+// 다크모드 토글
+function toggleDarkMode() {
+  document.body.classList.toggle('dark-mode');
+  const isDarkMode = document.body.classList.contains('dark-mode');
+  localStorage.setItem('darkMode', isDarkMode);
+  console.log('다크모드:', isDarkMode ? 'ON' : 'OFF');
+}
+
 // ==================== 설정 ====================
 function openSettings() {
-  console.log('설정 열기');
-  // TODO: 설정 모달 구현 예정 (3단계 이후)
+  // 설정 버튼을 다크모드 토글로 사용
+  toggleDarkMode();
 }
